@@ -492,27 +492,10 @@ This project is licensed under the **MIT License**. See the `LICENSE` file for c
 
 If you use this simulator in your research, please cite:
 
-```bibtex
-@software{underwater_network_simulator,
-  title={Hybrid Underwater Network Simulator (MI-Acoustic)},
-  author={[Your Name]},
-  year={2025},
-  url={https://github.com/[your-username]/underwater-network-simulator},
-  note={Python-based simulation framework for hybrid underwater communication networks}
-}
-```
 
 ### Contributing
 
 Contributions are welcome! Please feel free to submit pull requests, report bugs, or suggest enhancements.
-
-### Contact
-
-For questions, suggestions, or collaborations:
-
-- **Email**: [your.email@institution.edu]
-- **Institution**: [Your University/Research Institution]
-- **Research Group**: [Your Research Group Name]
 
 ---
 
