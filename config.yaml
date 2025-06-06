@@ -42,3 +42,76 @@ physical_layer:
     spreading_factor: 1.5 # k = 1.5
     transmit_gain: 1.0 # G_t = 1.0
     receive_gain: 1.0 # G_r = 1.0
+
+# ===================================================================
+# Game Theory Multi-Agent Optimization Layer Configuration
+# ===================================================================
+
+game_theory:
+  # Multi-Agent Setup
+  num_auvs: 3
+  environment:
+    dimensions: 3 # 3D underwater environment
+    bounds:
+      x_range: [0, 1000] # meters
+      y_range: [0, 1000] # meters
+      z_range: [10, 200] # underwater depth range
+
+  # Fixed Infrastructure
+  surface_station:
+    position: [500, 500, 0] # Surface center position
+
+  sensor_nodes:
+    count: 5
+    positions: # Underwater sensor locations
+      - [100, 100, 50]
+      - [200, 800, 75]
+      - [700, 200, 60]
+      - [800, 700, 45]
+      - [400, 600, 80]
+    data_generation_rate: 1.0 # packets/second per sensor
+
+  # Utility Function Weights
+  utility_weights:
+    throughput: 1.0 # w_1 - reward for data delivery
+    energy: 0.5 # w_2 - penalty for energy consumption
+    delay: 0.2 # w_3 - penalty for data buffering delay
+
+  # Energy Cost Model
+  energy_costs:
+    movement_per_meter: 0.1 # Joules/meter
+    acoustic_transmit_per_packet: 5.0 # Joules/packet (high power)
+    mi_transmit_per_packet: 0.05 # Joules/packet (low power)
+    idle_per_second: 0.01 # Joules/sec (operational cost)
+    relay_per_packet: 0.1 # Joules/packet (relay operation)
+
+  # AUV Specifications
+  auv_specs:
+    initial_energy: 1000.0 # Joules
+    buffer_capacity: 50 # Maximum packets in buffer
+    movement_speed: 5.0 # m/s
+    communication_range_mi: 40.0 # meters (matches physical layer)
+    communication_range_acoustic: 1000.0 # meters
+
+  # Learning Algorithm Configuration
+  learning_algorithm:
+    type: "iterative_best_response" # or "q_learning"
+    iterations: 100
+    convergence_threshold: 0.01 # Change in utility for convergence
+    learning_rate: 0.1 # (for Q-learning)
+    discount_factor: 0.9 # (for Q-learning)
+    exploration_rate: 0.1 # (for Q-learning)
+
+  # Simulation Parameters
+  simulation:
+    time_step_duration: 1.0 # seconds per iteration
+    max_simulation_time: 500.0 # total simulation time
+    convergence_check_interval: 10 # iterations between convergence checks
+
+  # Visualization Settings
+  visualization:
+    plot_paths: true
+    plot_utilities: true
+    plot_convergence: true
+    animation_enabled: false # Set to true for animated visualization
+    output_directory: "game_theory_results"

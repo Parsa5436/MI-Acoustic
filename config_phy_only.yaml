@@ -1,0 +1,41 @@
+# ===================================================================
+# Hybrid Underwater Network Simulation Configuration - PHY Only
+# ===================================================================
+
+simulation:
+  evaluation_ranges_m: [1, 5, 10, 20, 30, 50, 100, 200, 500]
+  relay_hop_fraction: 0.5
+
+  visualization:
+    range_labels:
+      ["1m", "5m", "10m", "20m", "30m", "50m", "100m", "200m", "500m"]
+    figure_size: [16, 10]
+    bar_width: 0.25
+    y_axis_limits: [-50, 150]
+    snr_clamp_threshold_db: -40.0
+    style: "seaborn-v0_8-whitegrid"
+    output_path: "hybrid_network_advantage_analysis.png"
+
+physical_layer:
+  mi:
+    carrier_frequency_hz: 100000
+    transmit_power_watts: 10.0
+    bandwidth_hz: 10000
+    noise_psd_w_hz: 0.0000000000000001
+    max_useful_range_m: 40.0
+    permeability_seawater: 0.00000125663706212
+    transmit_coil_turns: 20
+    receive_coil_turns: 20
+    transmit_coil_area_m2: 0.05
+    receive_coil_area_m2: 0.05
+    transmit_coil_resistance_ohm: 1.0
+    receive_coil_resistance_ohm: 1.0
+
+  acoustic:
+    carrier_frequency_hz: 12000
+    transmit_power_watts: 0.5
+    bandwidth_hz: 3000
+    noise_psd_w_hz: 0.000000000000005
+    spreading_factor: 1.5
+    transmit_gain: 1.0
+    receive_gain: 1.0
