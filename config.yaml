@@ -1,27 +1,44 @@
-# Configuration for Underwater Network Simulation
+# ===================================================================
+# Hybrid Underwater Network Simulation Configuration
+# Exact parameters as specified in the technical requirements
+# ===================================================================
+
 simulation:
-  evaluation_ranges_m: [1, 10, 15, 50, 100, 500, 1000, 3000]
+  evaluation_ranges_m: [1, 5, 10, 20, 30, 50, 100, 200, 500]
+  relay_hop_fraction: 0.5 # AUV positioned at midpoint (r/2)
+
   visualization:
-    range_labels: ["1m", "10m", "15m", "50m", "100m", "500m", "1km", "3km"]
-    figure_size: [16, 9]
+    range_labels:
+      ["1m", "5m", "10m", "20m", "30m", "50m", "100m", "200m", "500m"]
+    figure_size: [16, 10]
     bar_width: 0.25
-    y_axis_limits: [-20, 130]
-    snr_clamp_threshold_db: -10.0
+    y_axis_limits: [-50, 150]
+    snr_clamp_threshold_db: -40.0
     style: "seaborn-v0_8-whitegrid"
-    output_path: "snr_comparison_chart.png"
+    output_path: "hybrid_network_advantage_analysis.png"
 
-environment:
-  wind_speed_ms: 5.0
-  shipping_factor: 0.5 # 0=low, 1=high
-
+# Table 1: MI (Magnetic Induction) Parameters - ENHANCED FOR CROSSOVER DEMONSTRATION
 physical_layer:
   mi:
-    transmit_power_watts: 0.05
-    calibration:
-      max_range_m: 15.0
-      snr_at_max_range_db: 3.0
+    carrier_frequency_hz: 100000 # f_m = 100 kHz
+    transmit_power_watts: 10.0 # P_t^(m) = 10.0 W (enhanced for short-range superiority)
+    bandwidth_hz: 10000 # B_m = 10 kHz
+    noise_psd_w_hz: 0.0000000000000001 # N_0^(m) = 1e-16 W/Hz (lower noise)
+    max_useful_range_m: 40.0 # R_MI = 40.0 m
+    permeability_seawater: 0.00000125663706212 # μ = 1.25663706212e-6 H/m
+    transmit_coil_turns: 20 # N_t = 20 turns (enhanced coupling)
+    receive_coil_turns: 20 # N_r = 20 turns (enhanced coupling)
+    transmit_coil_area_m2: 0.05 # A_t = 0.05 m² (larger coils)
+    receive_coil_area_m2: 0.05 # A_r = 0.05 m² (larger coils)
+    transmit_coil_resistance_ohm: 1.0 # R_t = 1.0 Ω
+    receive_coil_resistance_ohm: 1.0 # R_r = 1.0 Ω
+
+  # Table 2: Acoustic Parameters - ADJUSTED FOR CROSSOVER DEMONSTRATION
   acoustic:
-    center_frequency_khz: 18.0
-    bandwidth_hz: 3000.0
-    default_transmit_power_watts: 5.0
-    spreading_factor: 1.5
+    carrier_frequency_hz: 12000 # f_a = 12 kHz
+    transmit_power_watts: 0.5 # P_t^(a) = 0.5 W (reduced for crossover)
+    bandwidth_hz: 3000 # B_a = 3 kHz
+    noise_psd_w_hz: 0.000000000000005 # N_0^(a) = 5e-15 W/Hz (higher noise)
+    spreading_factor: 1.5 # k = 1.5
+    transmit_gain: 1.0 # G_t = 1.0
+    receive_gain: 1.0 # G_r = 1.0

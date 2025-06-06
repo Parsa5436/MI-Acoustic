@@ -1,0 +1,4 @@
+# Required packages for Hybrid Underwater Network Simulator
+numpy>=1.20.0
+matplotlib>=3.5.0
+PyYAML>=6.0.0

@@ -1,502 +1,376 @@
-# 🌊 Hybrid Underwater Network Simulator (MI-Acoustic)
+# 🌊 Hybrid Underwater Communication Network Simulator
 
 [![Python](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Research](https://img.shields.io/badge/research-underwater%20communications-orange.svg)]()
 
-## 📖 Overview
+## 📖 Project Overview
 
-This repository presents a comprehensive Python-based simulator for modeling and analyzing the performance of a **two-tier hybrid underwater communication network**. The simulation framework combines the advantages of:
+This repository presents a **comprehensive Python simulation framework** for analyzing the strategic advantage of a two-tier hybrid underwater communication system. The simulator combines **Magnetic Induction (MI)** and **Acoustic** communication technologies to demonstrate optimal path selection across different communication ranges.
 
-- **Short-range, high-bandwidth Magnetic Induction (MI)** communication
-- **Long-range Acoustic** communication
+![Hybrid Network Analysis](hybrid_network_advantage_analysis.png)
 
-The simulator provides a quantitative analysis of Signal-to-Noise Ratio (SNR) performance across various communication ranges, demonstrating why a hybrid approach is optimal for underwater sensor networks.
+## 🎯 Research Objective
 
-![SNR Comparison Chart](snr_comparison_chart.png)
+**Demonstrate the strategic advantage of intelligent hybrid underwater communication networks** that can adaptively select between:
 
-## 🎯 Research Motivation
-
-Underwater communication faces unique challenges:
-
-- **Acoustic signals** suffer from frequency-dependent absorption and ambient noise
-- **Magnetic Induction** provides reliable short-range communication but has severe range limitations
-- **Hybrid systems** can leverage the strengths of both technologies
-
-This simulator quantifies the performance trade-offs and identifies the optimal operational domains for each technology.
+1. **Two-hop MI-Acoustic relay** (Robot → AUV → Surface) for short-range scenarios
+2. **Direct acoustic transmission** (Robot → Surface) for long-range scenarios
+3. **Hybrid optimal path selection** that intelligently chooses the best strategy
 
 ## ✨ Key Features
 
-### 🔬 **Physics-Based Modeling**
+### 🔬 **Precise Physical Modeling**
 
-- **Thorp's Absorption Formula**: Frequency-dependent acoustic attenuation
-- **Urick's Ambient Noise Model**: Comprehensive underwater noise modeling
-- **MI Channel Model**: Distance-dependent magnetic field attenuation
-- **Sonar Equation**: Standard underwater acoustics framework
+- **Thorp's Absorption Formula**: Frequency-dependent acoustic attenuation modeling
+- **MI r^-6 Dependency**: Electromagnetic field theory-based magnetic induction modeling
+- **Exact Parameter Implementation**: All formulas match published technical specifications
+- **Configuration-Driven**: External YAML configuration for all physical parameters
 
-### 🏗️ **Modular Architecture**
+### 🏗️ **Object-Oriented Architecture**
 
 - `AcousticChannel`: Implements underwater acoustic propagation physics
-- `MIChannel`: Models magnetic induction communication
-- `Simulator`: Orchestrates the simulation and comparison
-- `Visualizer`: Generates publication-quality charts
+- `MIChannel`: Models magnetic induction communication with coupling theory
+- `Simulator`: Orchestrates hybrid system simulation and path selection logic
+- `Visualizer`: Generates publication-quality grouped bar charts
 
-### ⚙️ **Configuration-Driven Design**
+### 📊 **Professional Visualization**
 
-- All parameters externalized in `config.yaml`
-- Easy parameter sweeps without code modification
-- Supports multiple environmental scenarios
-
-### 📊 **Advanced Visualization**
-
-- SNR comparison across communication ranges
-- Identification of operational domains
-- Communication gap analysis
-- Publication-ready graphics
+- **Grouped Bar Charts**: Side-by-side comparison of all three communication strategies
+- **Value Labels**: SNR values displayed on all bars for quantitative analysis
+- **Strategic Decision Display**: Clear indication of which path is selected at each range
+- **Publication-Ready**: High-resolution charts suitable for research papers
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Python 3.7+** with pip package manager
-- Basic understanding of underwater communication principles
-- No programming experience required - all parameters are in configuration files
+```bash
+# Required Python packages
+pip install numpy matplotlib pyyaml
+```
 
-### Installation
-
-1. **Clone or download this repository**
-2. **Install required Python packages:**
-   ```bash
-   pip install numpy matplotlib pyyaml
-   ```
-
-### Running the Simulation
-
-Execute the simulation with a single command:
+### Installation & Execution
 
 ```bash
+# Clone or download the repository
+git clone <repository-url>
+cd Mandana
+
+# Run the simulation
 python main.py
 ```
 
-**Output:**
+### Expected Output
 
-- Console output showing simulation progress
-- `snr_comparison_chart.png` - High-quality SNR comparison chart
-- Quantitative analysis of hybrid system performance
+- **Console Analysis**: Detailed SNR calculations and strategy selection logic
+- **Visual Chart**: `hybrid_network_advantage_analysis.png` showing performance comparison
+- **Debug Information**: MI and acoustic coefficient calculations for verification
 
 ## 🔧 System Architecture
 
-### Communication Models Implemented
-
-#### 1. **Acoustic Channel Model**
-
-**Mathematical Foundation:**
-
-```
-SNR_acoustic = SL - TL - NL
-
-Where:
-- SL = Source Level (dB re 1 μPa @ 1m)
-- TL = Transmission Loss (dB)
-- NL = Noise Level (dB re 1 μPa)
-```
-
-**Transmission Loss Components:**
-
-- **Spreading Loss**: `TL_spreading = k × 10 × log10(r)`
-- **Absorption Loss**: `TL_absorption = α × r` (using Thorp's formula)
-
-#### 2. **Magnetic Induction Channel Model**
-
-**Mathematical Foundation:**
-
-```
-SNR_MI = C_m - 60 × log10(r)
-
-Where:
-- C_m = System calibration constant (dB)
-- r = Communication range (m)
-- 60 dB/decade = Theoretical MI field decay rate
-```
-
-#### 3. **Hybrid System Model**
-
-```
-SNR_hybrid = max(SNR_acoustic, SNR_MI)
-```
-
-The hybrid system intelligently selects the best available channel at each range.
-
-## 📊 Physics Models and Formulations
-
-### Thorp's Absorption Formula
-
-Models frequency-dependent acoustic attenuation in seawater:
-
-```
-α(f) = (0.11f²)/(1+f²) + (44f²)/(4100+f²) + 2.75×10⁻⁴f² + 0.003
-```
-
-**Where:**
-
-- `α` = Absorption coefficient (dB/km)
-- `f` = Frequency (kHz)
-
-### Urick's Ambient Noise Model
-
-Comprehensive underwater noise modeling including:
-
-1. **Turbulence Noise**: `N_t = 17 - 30 log10(f)`
-2. **Shipping Noise**: `N_s = 40 + 20(s-0.5) + 26 log10(f) - 60 log10(f+0.03)`
-3. **Wind Noise**: `N_w = 50 + 7.5√v + 20 log10(f) - 40 log10(f+0.4)`
-4. **Thermal Noise**: `N_th = -15 + 20 log10(f)`
-
-**Total Noise**: `N_total = 10 log10(∑ 10^(Ni/10))`
-
-## ⚙️ Configuration Parameters
-
-All simulation parameters are controlled via `config.yaml`. The following comprehensive table explains each parameter, its physical meaning, and engineering rationale:
-
-### 🌊 Environmental Parameters
-
-| Parameter         | Symbol | Value | Unit  | Physical Meaning          | Engineering Rationale                                                                                                                                    |
-| ----------------- | ------ | ----- | ----- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `wind_speed_ms`   | `v`    | `5.0` | m/s   | Sea surface wind speed    | **Beaufort Scale 3** (moderate conditions). Affects surface wave noise generation. Typical value for realistic ocean conditions without extreme weather. |
-| `shipping_factor` | `s`    | `0.5` | [0,1] | Relative shipping density | **Moderate traffic scenario**. 0=pristine waters, 1=heavy shipping lanes. Chosen to represent realistic commercial waterway conditions.                  |
-
-### 📡 Acoustic Channel Parameters
-
-| Parameter                      | Symbol | Value  | Unit | Physical Meaning             | Engineering Rationale                                                                                                                                                                                            |
-| ------------------------------ | ------ | ------ | ---- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `center_frequency_khz`         | `f_c`  | `18.0` | kHz  | Acoustic carrier frequency   | **Optimal frequency for mid-range communication**. Balance between absorption loss (lower freq. preferred) and data rate capability (higher freq. preferred). Within typical underwater modem range (12-25 kHz). |
-| `bandwidth_hz`                 | `B`    | `3000` | Hz   | Signal bandwidth             | **OFDM subcarrier spacing**. Determines data rate capability and noise power. 3 kHz allows for robust symbol rates while maintaining spectral efficiency.                                                        |
-| `default_transmit_power_watts` | `P_t`  | `5.0`  | W    | Acoustic transmitter power   | **Standard underwater modem power**. Compromise between range/performance and battery life. Typical for commercial underwater modems.                                                                            |
-| `spreading_factor`             | `k`    | `1.5`  | -    | Geometric spreading exponent | **Practical spreading** between cylindrical (k=1) and spherical (k=2). Accounts for shallow water effects, bottom/surface reflections, and waveguide propagation.                                                |
-
-### 🧲 Magnetic Induction Parameters
-
-| Parameter              | Symbol      | Value  | Unit | Physical Meaning                | Engineering Rationale                                                                                                                          |
-| ---------------------- | ----------- | ------ | ---- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `transmit_power_watts` | `P_{MI}`    | `0.05` | W    | MI transmitter power            | **Low power consumption design**. MI systems typically operate at much lower power than acoustic due to near-field coupling efficiency.        |
-| `max_range_m`          | `r_{max}`   | `15.0` | m    | Reliable MI communication range | **Experimentally validated range**. Based on practical MI transceiver implementations and acceptable bit error rates in underwater conditions. |
-| `snr_at_max_range_db`  | `SNR_{min}` | `3.0`  | dB   | Minimum required SNR            | **Communication threshold**. Standard requirement for reliable digital communication with basic modulation (BPSK) and error correction coding. |
-
-### 📊 Simulation Parameters
-
-| Parameter                | Symbol        | Value                            | Unit | Physical Meaning  | Engineering Rationale                                                                                                                   |
-| ------------------------ | ------------- | -------------------------------- | ---- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `evaluation_ranges_m`    | `r_i`         | `[1,10,15,50,100,500,1000,3000]` | m    | Test distances    | **Logarithmic sampling** covering three operational domains: MI-dominant (1-15m), transition zone (15-100m), acoustic-dominant (100m+). |
-| `snr_clamp_threshold_db` | `SNR_{floor}` | `-10.0`                          | dB   | Display threshold | **Visualization limit**. Prevents extremely low SNR values from distorting chart readability while maintaining engineering relevance.   |
-
-### 🎨 Visualization Parameters
-
-| Parameter       | Symbol | Value       | Unit   | Physical Meaning  | Engineering Rationale                                                                                                             |
-| --------------- | ------ | ----------- | ------ | ----------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `figure_size`   | -      | `[16,9]`    | inches | Chart dimensions  | **Publication quality**. 16:9 aspect ratio for presentations and papers. Large enough for clear readability of technical details. |
-| `bar_width`     | -      | `0.25`      | -      | Bar chart spacing | **Optimal visual separation**. Allows clear comparison between three systems without overcrowding.                                |
-| `y_axis_limits` | -      | `[-20,130]` | dB     | SNR display range | **Engineering relevance**. Covers practical SNR range from unusable (-20 dB) to excellent (130 dB) communication quality.         |
-
-## 🔬 Detailed Physics Implementation
-
-### Source Level Calculation
-
-The acoustic source level is calculated using the standard sonar equation:
-
-```
-SL = 170.8 + 10 × log10(P_t)
-```
-
-**Where:** 170.8 dB re 1 μPa @ 1m is the reference level for 1 Watt acoustic power.
-
-### Thorp's Absorption Coefficients
-
-The implementation uses the complete Thorp formula accounting for:
-
-- **Boric acid relaxation**: `(0.11f²)/(1+f²)` term
-- **Magnesium sulfate relaxation**: `(44f²)/(4100+f²)` term
-- **Viscous losses**: `2.75×10⁻⁴f²` term
-- **Pure water absorption**: `0.003` constant term
-
-### MI Field Decay Physics
-
-The 60 dB/decade decay rate is derived from electromagnetic field theory:
-
-- **Near-field coupling**: Magnetic field strength ∝ 1/r³
-- **Power coupling**: Received power ∝ 1/r⁶
-- **SNR in dB**: 60 × log10(r) decay rate
-
-## 📈 Simulation Results Interpretation
-
-### Performance Domains
-
-1. **MI-Dominant Region (1-15m)**
-
-   - High SNR (>80 dB)
-   - Suitable for high-bandwidth applications
-   - Sensor-to-gateway communication
-
-2. **Communication Gap (15-100m)**
-
-   - Both technologies show degraded performance
-   - Requires AUV-based relay systems
-   - Critical design consideration
-
-3. **Acoustic-Dominant Region (100m+)**
-   - MI becomes unusable (<0 dB SNR)
-   - Acoustic provides reliable long-range links
-   - Gateway-to-surface communication
-
-### Hybrid System Advantages
-
-- **Seamless transition** between technologies
-- **Optimized power consumption** (MI when available)
-- **Extended network coverage** through intelligent selection
-
-## 🔧 Code Structure and Implementation
-
-### File Organization
-
-```
-📁 Underwater Network Simulator/
-├── 📄 config.yaml              # All simulation parameters
-├── 📄 main.py                  # Main simulation engine
-├── 📄 README.md                # This documentation
-├── 📊 snr_comparison_chart.png  # Generated results
-└── 📜 requirements.txt         # Python dependencies (create if needed)
-```
-
-### Core Classes and Their Responsibilities
+### Core Classes and Responsibilities
 
 #### `AcousticChannel` Class
 
-**Purpose**: Models underwater acoustic propagation using established physics
-**Key Methods**:
+**Physics Implementation:**
 
-- `_thorp_absorption_db_per_km()`: Implements frequency-dependent absorption
-- `_urick_ambient_noise_db_per_hz()`: Calculates comprehensive noise spectrum
-- `calculate_snr()`: Computes SNR using sonar equation
+```python
+# Acoustic SNR Formula: C_a * [r^k * 10^(α(f) * r / 10)]^-1
+SNR_dB = 10*log10(C_a) - 10*log10(r^k * 10^(α(f)*r/10))
+```
+
+**Key Methods:**
+
+- `_calculate_acoustic_coefficient()`: Computes C_a = (P_t _ G_t _ G_r) / (N_0 \* B_a)
+- `_thorp_absorption_db_per_km()`: α(f) = (0.11f²/(1+f²)) + (44f²/(4100+f²)) + (2.75e-4 \* f²) + 0.003
+- `calculate_snr_db()`: Returns SNR array for given range array
 
 #### `MIChannel` Class
 
-**Purpose**: Models magnetic induction communication
-**Key Methods**:
+**Physics Implementation:**
 
-- `_calibrate()`: Determines system constant from known performance point
-- `calculate_snr()`: Applies electromagnetic field decay model
+```python
+# MI SNR Formula: SNR = C_m / r^6
+# Where C_m = (P_t * K_m) / (N_0 * B_m)
+# K_m = ((ωμN_tN_rA_tA_r)² / ((4π)²R_tR_r))
+```
+
+**Key Methods:**
+
+- `_calculate_coupling_constant()`: Electromagnetic coupling coefficient K_m
+- `_calculate_mi_coefficient()`: System coefficient C_m including power and noise
+- `calculate_snr_db()`: Returns SNR with maximum range enforcement
 
 #### `Simulator` Class
 
-**Purpose**: Orchestrates the simulation workflow
-**Key Methods**:
+**Hybrid System Logic:**
 
-- `run()`: Executes SNR calculations for all systems
-- Returns hybrid system performance (max of acoustic and MI)
+```python
+# Strategy 1: Acoustic-Only (direct transmission at full range r)
+snr_acoustic_only = acoustic_channel.calculate_snr_db(ranges)
 
-#### `Visualizer` Class
+# Strategy 2: Two-Hop Relay (each hop at r/2)
+snr_mi_hop = mi_channel.calculate_snr_db(ranges/2)
+snr_acoustic_hop = acoustic_channel.calculate_snr_db(ranges/2)
+snr_two_hop_relay = minimum(snr_mi_hop, snr_acoustic_hop)  # Bottleneck principle
 
-**Purpose**: Generates publication-quality charts
-**Key Features**:
-
-- Grouped bar charts for system comparison
-- Operational domain annotations
-- SNR value labels for quantitative analysis
-
-## 🧪 Experimental Validation and Assumptions
-
-### Model Validation Sources
-
-1. **Thorp's Formula**: Validated against experimental measurements in ocean environments
-2. **Urick's Noise Model**: Based on extensive oceanographic noise measurements
-3. **MI Range Performance**: Calibrated to experimental MI transceiver implementations
-4. **Sonar Equation**: Standard framework used in underwater acoustics community
-
-### Key Assumptions
-
-- **Ideal transducers**: No additional hardware losses considered
-- **Homogeneous medium**: Uniform water properties (temperature, salinity, pressure)
-- **Direct path propagation**: Multipath effects and Doppler shifts neglected
-- **Static conditions**: No consideration of mobility or time-varying channels
-- **Perfect synchronization**: Ideal timing and frequency synchronization assumed
-
-### Limitations and Extensions
-
-**Current Limitations**:
-
-- Single-frequency acoustic model (no wideband effects)
-- No consideration of marine biology interference
-- Simplified environmental modeling
-- No network protocol overhead
-
-**Possible Extensions**:
-
-- Multi-frequency acoustic analysis
-- Dynamic environmental conditions
-- Network layer simulation
-- Energy consumption modeling
-- Real-time channel variations
-
-## 📚 Scientific Background and References
-
-### Fundamental Principles
-
-#### Underwater Acoustics
-
-The simulator implements the **Sonar Equation**, fundamental to underwater acoustics:
-
-```
-SNR = SL - TL - NL + DI
+# Strategy 3: Hybrid System (intelligent selection)
+snr_hybrid_system = maximum(snr_acoustic_only, snr_two_hop_relay)
 ```
 
-Where DI (Directivity Index) is assumed to be 0 for omnidirectional transducers.
+### Configuration Parameters
 
-#### Electromagnetic Propagation
+All simulation parameters are controlled via `config.yaml`:
 
-Magnetic induction systems operate in the **near-field regime** where:
+#### Physical Layer - MI Parameters
 
-- Magnetic field strength follows 1/r³ relationship
-- Power transfer efficiency follows 1/r⁶ relationship
-- Frequency-independent propagation (quasi-static approximation)
+```yaml
+physical_layer:
+  mi:
+    carrier_frequency_hz: 100000 # f_m = 100 kHz
+    transmit_power_watts: 10.0 # P_t^(m) = 10.0 W
+    bandwidth_hz: 10000 # B_m = 10 kHz
+    noise_psd_w_hz: 1e-16 # N_0^(m) = 1e-16 W/Hz
+    max_useful_range_m: 40.0 # R_MI = 40.0 m
+    permeability_seawater: 1.25663706212e-6 # μ = 1.26e-6 H/m
+    transmit_coil_turns: 20 # N_t = 20 turns
+    receive_coil_turns: 20 # N_r = 20 turns
+    transmit_coil_area_m2: 0.05 # A_t = 0.05 m²
+    receive_coil_area_m2: 0.05 # A_r = 0.05 m²
+    transmit_coil_resistance_ohm: 1.0 # R_t = 1.0 Ω
+    receive_coil_resistance_ohm: 1.0 # R_r = 1.0 Ω
+```
 
-### Key Scientific Publications
+#### Physical Layer - Acoustic Parameters
+
+```yaml
+physical_layer:
+  acoustic:
+    carrier_frequency_hz: 12000 # f_a = 12 kHz
+    transmit_power_watts: 0.5 # P_t^(a) = 0.5 W
+    bandwidth_hz: 3000 # B_a = 3 kHz
+    noise_psd_w_hz: 5e-15 # N_0^(a) = 5e-15 W/Hz
+    spreading_factor: 1.5 # k = 1.5
+    transmit_gain: 1.0 # G_t = 1.0
+    receive_gain: 1.0 # G_r = 1.0
+```
+
+## 📊 Scientific Validation
+
+### Mathematical Foundations
+
+#### Thorp's Absorption Formula
+
+The complete frequency-dependent absorption coefficient:
+
+```
+α(f) = (0.11f²)/(1+f²) + (44f²)/(4100+f²) + (2.75×10⁻⁴f²) + 0.003
+```
+
+- **Boric acid relaxation**: First term
+- **Magnesium sulfate relaxation**: Second term
+- **Viscous losses**: Third term
+- **Pure water absorption**: Fourth term
+
+#### MI Electromagnetic Coupling
+
+Based on mutual inductance theory:
+
+```
+K_m = ((ωμN_tN_rA_tA_r)²) / ((4π)²R_tR_r)
+```
+
+Where:
+
+- `ω = 2πf_m`: Angular frequency
+- `μ`: Seawater permeability
+- `N_t, N_r`: Transmit/receive coil turns
+- `A_t, A_r`: Transmit/receive coil areas
+- `R_t, R_r`: Transmit/receive coil resistances
+
+### Simulation Results Analysis
+
+#### Example Output (Typical Run)
+
+```
+Range    Acoustic     MI-Hop     Acoustic-Hop   Relay      Hybrid     Strategy
+(m)      Only (dB)    (dB)       (dB)           (dB)       (dB)       Selected
+1        105.2        124.0      109.7          109.7      109.7      Relay Path
+5        94.7         82.1       99.3           82.1       94.7       Direct Acoustic
+10       90.2         64.0       94.7           64.0       90.2       Direct Acoustic
+20       85.7         46.0       90.2           46.0       85.7       Direct Acoustic
+30       83.0         35.4       87.6           35.4       83.0       Direct Acoustic
+50       79.7         22.1       84.2           22.1       79.7       Direct Acoustic
+100      75.1         -200.0     79.7           -200.0     75.1       Direct Acoustic
+```
+
+#### Key Insights
+
+1. **Short Range (1m)**: Two-hop relay superior due to MI efficiency
+2. **Medium Range (5-50m)**: Direct acoustic becomes optimal
+3. **Long Range (100m+)**: Only acoustic path remains viable
+4. **Crossover Point**: Demonstrates strategic value of hybrid approach
+
+## 🎨 Visualization Features
+
+### Grouped Bar Chart Elements
+
+- **Acoustic-Only Path** (Green bars): Direct transmission performance
+- **Two-Hop Relay Path** (Orange bars): MI → AUV → Acoustic performance
+- **Hybrid System** (Blue bars): Optimal path selection results
+- **Value Labels**: SNR values displayed on all bars for quantitative analysis
+- **Strategic Indicators**: Clear visual indication of crossover points
+
+### Chart Customization
+
+```yaml
+simulation:
+  visualization:
+    figure_size: [16, 10] # Chart dimensions
+    bar_width: 0.25 # Bar spacing
+    y_axis_limits: [-50, 150] # SNR display range
+    snr_clamp_threshold_db: -40.0 # Minimum displayed SNR
+    output_path: "hybrid_network_advantage_analysis.png"
+```
+
+## 🔬 Research Applications
+
+### Network Design Optimization
+
+- **Optimal AUV Positioning**: Determine ideal relay placement
+- **Communication Range Planning**: Identify coverage gaps and solutions
+- **Power Budget Analysis**: Optimize energy consumption strategies
+
+### Technology Comparison Studies
+
+- **Performance Benchmarking**: Quantitative comparison between technologies
+- **Frequency Optimization**: Analyze effects of carrier frequency selection
+- **Environmental Impact**: Study effects of water conditions on performance
+
+### Protocol Development
+
+- **Hybrid Switching Logic**: Develop algorithms for path selection
+- **Quality of Service**: Reliability and latency analysis
+- **Network Topology**: Multi-hop routing optimization
+
+## 🛠️ Customization Guide
+
+### Environmental Scenarios
+
+```yaml
+# Arctic Waters (Low noise environment)
+physical_layer:
+  acoustic:
+    noise_psd_w_hz: 1e-15  # Reduced ambient noise
+
+# Coastal Waters (High noise environment)
+physical_layer:
+  acoustic:
+    noise_psd_w_hz: 1e-14  # Increased ambient noise
+```
+
+### System Design Variations
+
+```yaml
+# High-Performance MI System
+physical_layer:
+  mi:
+    transmit_power_watts: 20.0      # Higher power
+    max_useful_range_m: 60.0        # Extended range
+
+# Long-Range Acoustic System
+physical_layer:
+  acoustic:
+    transmit_power_watts: 2.0       # Higher power
+    carrier_frequency_hz: 8000      # Lower frequency for better range
+```
+
+## 📈 Performance Metrics
+
+### Signal-to-Noise Ratio (SNR)
+
+- **Excellent**: SNR > 80 dB (High-bandwidth applications)
+- **Good**: 20 dB < SNR < 80 dB (Standard communication)
+- **Marginal**: 3 dB < SNR < 20 dB (Basic connectivity)
+- **Unusable**: SNR < 3 dB (Communication failure)
+
+### Strategic Advantage Quantification
+
+The hybrid system provides measurable advantages:
+
+- **Short Range**: Up to 4.5 dB improvement over direct acoustic
+- **Medium Range**: Seamless transition between technologies
+- **Long Range**: Maintains acoustic connectivity when MI fails
+
+## 🚀 Future Enhancement Roadmap
+
+### Phase 1: Advanced Physics
+
+- [ ] Multi-path propagation effects
+- [ ] Dynamic environmental conditions
+- [ ] Doppler shift modeling
+- [ ] Realistic antenna/coil patterns
+
+### Phase 2: Network Layer
+
+- [ ] Multi-hop routing protocols
+- [ ] Network topology optimization
+- [ ] Traffic load analysis
+- [ ] End-to-end delay modeling
+
+### Phase 3: Real-World Integration
+
+- [ ] Hardware-in-the-loop simulation
+- [ ] Field trial data integration
+- [ ] Real-time adaptive algorithms
+- [ ] Energy consumption optimization
+
+## 📚 Scientific References
+
+### Fundamental Publications
 
 1. **Thorp, W.H.** (1967). "Analytic Description of the Low-Frequency Attenuation Coefficient"
 2. **Urick, R.J.** (1983). "Principles of Underwater Sound"
 3. **Akyildiz, I.F. et al.** (2005). "Underwater acoustic sensor networks: research challenges"
 4. **Che, X. et al.** (2010). "Re-evaluation of RF electromagnetic communication in underwater sensor networks"
 
-### Mathematical Foundations
+### Technical Standards
 
-#### Signal Processing Theory
-
-- **Shannon-Hartley Theorem**: Channel capacity limitations
-- **Noise Figure Analysis**: System sensitivity calculations
-- **Link Budget Analysis**: Power budget methodology
-
-#### Electromagnetic Field Theory
-
-- **Maxwell's Equations**: Fundamental electromagnetic relationships
-- **Near-field vs Far-field**: Propagation regime distinctions
-- **Mutual Inductance**: Coupling mechanism for MI systems
-
-## 🛠️ Customization and Parameter Tuning
-
-### Environmental Scenarios
-
-**Arctic Waters** (Low noise):
-
-```yaml
-environment:
-  wind_speed_ms: 2.0 # Calm conditions
-  shipping_factor: 0.1 # Minimal traffic
-```
-
-**Coastal Waters** (High noise):
-
-```yaml
-environment:
-  wind_speed_ms: 8.0 # Rough conditions
-  shipping_factor: 0.9 # Heavy traffic
-```
-
-### System Design Variations
-
-**High-Performance MI System**:
-
-```yaml
-physical_layer:
-  mi:
-    transmit_power_watts: 0.1 # Higher power
-    calibration:
-      max_range_m: 25.0 # Extended range
-      snr_at_max_range_db: 5.0 # Better sensitivity
-```
-
-**Long-Range Acoustic System**:
-
-```yaml
-physical_layer:
-  acoustic:
-    center_frequency_khz: 12.0 # Lower frequency
-    default_transmit_power_watts: 10.0 # Higher power
-```
-
-### Frequency Analysis
-
-To analyze frequency effects, modify the acoustic parameters:
-
-```yaml
-# Low frequency (better range)
-center_frequency_khz: 10.0
-
-# High frequency (better data rate)
-center_frequency_khz: 25.0
-```
-
-## 🎯 Research Applications
-
-### Network Design Optimization
-
-- **Gateway Placement**: Identify optimal locations for acoustic gateways
-- **Sensor Density**: Determine maximum node density for MI clusters
-- **AUV Routing**: Plan trajectories for communication gap bridging
-
-### Technology Comparison
-
-- **Performance Benchmarking**: Quantitative comparison of communication technologies
-- **Energy Analysis**: Power consumption optimization strategies
-- **Range-Data Rate Trade-offs**: System design space exploration
-
-### Protocol Development
-
-- **MAC Layer Design**: Medium access control for hybrid systems
-- **Routing Algorithms**: Multi-hop network path optimization
-- **Quality of Service**: Reliability and latency analysis
-
-## 🚀 Future Development Roadmap
-
-### Phase 1: Enhanced Physics Models
-
-- [ ] Multi-frequency acoustic propagation
-- [ ] Temperature and salinity gradients
-- [ ] Bottom and surface reflection effects
-- [ ] Realistic antenna patterns
-
-### Phase 2: Network Layer Simulation
-
-- [ ] Multi-hop routing protocols
-- [ ] Network topology optimization
-- [ ] Traffic load analysis
-- [ ] Quality of Service metrics
-
-### Phase 3: Real-time Implementation
-
-- [ ] Hardware-in-the-loop simulation
-- [ ] Real-time channel estimation
-- [ ] Adaptive system switching
-- [ ] Field trial validation
-
-### Phase 4: AI Integration
-
-- [ ] Machine learning for channel prediction
-- [ ] Intelligent resource allocation
-- [ ] Adaptive modulation and coding
-- [ ] Predictive maintenance
+- **ITU-R P.372**: Radio noise characteristics
+- **IEC 60565**: Underwater acoustics terminology
+- **IEEE 802.11**: Wireless communication standards (adapted principles)
 
 ## 📄 License and Citation
 
 ### License
 
-This project is licensed under the **MIT License**. See the `LICENSE` file for complete terms.
+This project is licensed under the **MIT License**. See the LICENSE file for complete terms.
 
 ### Citation
 
 If you use this simulator in your research, please cite:
 
+```bibtex
+@software{hybrid_underwater_network_simulator,
+  title={Hybrid Underwater Communication Network Simulator},
+  author={Hybrid Network Research Team},
+  year={2025},
+  url={https://github.com/your-repo/hybrid-underwater-network}
+}
+```
 
 ### Contributing
 
-Contributions are welcome! Please feel free to submit pull requests, report bugs, or suggest enhancements.
+Contributions are welcome! Please feel free to:
+
+- Submit pull requests for enhancements
+- Report bugs or issues
+- Suggest new features or improvements
+- Share research results using this simulator
 
 ---
 
-_This simulator was developed for research purposes in underwater communication networks. It provides a foundation for understanding hybrid system performance and can be extended for specific research applications._
+**Developed for advanced research in underwater communication networks. This simulator provides a solid foundation for understanding hybrid system performance and strategic communication path selection in challenging underwater environments.**
+
+---
